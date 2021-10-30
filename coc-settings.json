@@ -1,5 +1,32 @@
 {
-     "clangd.path": "/Users/timenos/.config/coc/extensions/coc-clangd-data/install/11.0.0/clangd_11.0.0/bin/clangd",
-     "coc.preferences.formatOnSaveFiletypes": ["css", "markdown", "html"]
+"clangd.path": "/Users/timenos/.config/coc/extensions/coc-clangd-data/install/11.0.0/clangd_11.0.0/bin/clangd",
+  "coc.preferences.formatOnSaveFiletypes": ["css", "markdown", "html"], 
+  "languageserver": {
+    "haskell": {
+      "command": "haskell-language-server-wrapper",
+      "args": [
+        "--lsp"
+      ],
+      "rootPatterns": [
+        ".stack.yaml",
+        ".hie-bios",
+        "BUILD.bazel",
+        "cabal.config",
+        "package.yaml"
+      ],
+      "filetypes": [
+        "hs",
+        "lhs",
+        "haskell"
+      ],
+      "initializationOptions": {
+        "languageServerHaskell": {
+          "hlintOn": true,
+          "maxNumberOfProblems": 10,
+          "completionSnippetsOn": true
+        }
+      }
+    }
+  }
 }
  

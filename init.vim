@@ -1,16 +1,39 @@
-set nocompatible              
-:inoremap jj <Esc> 
-:nnoremap <C-o> :NERDTreeToggle<CR>
-filetype plugin indent on    
-set rtp+=~/.vim/plugged
+set nocompatible         
+set guicursor=
+set rtp+=~/.config/nvim/autoload/plugged
+set nohlsearch
 set number relativenumber
-syntax enable 
+set noshowmode
+""set colorcolumn=80"
+set noruler
+set laststatus=0
+set noshowcmd
+set cmdheight=1
+set tabstop=4 softtabstop=4
+set shiftwidth=4
 set background=dark
-colorscheme gruvbox 
+syntax enable 
+inoremap jj <Esc> 
+nnoremap <C-o> :NERDTreeToggle<CR>
+inoremap ( ()<Esc>i
+inoremap { {}<Esc>i
+inoremap " ""<Esc>i
+inoremap [ []<Esc>i
+inoremap ' ''<Esc>i
+inoremap <C-p> :Files;l<CR>
+colorscheme peachpuff 
+""highlight CocErrorHighlight ctermfg=Blue guifg=#ff0000
+hi! CocErrorSign guifg=#d1666a
+hi! CocInfoSign guibg=#353b45
+hi! CocWarningSign guifg=#353b45
 let g:user_emmet_leader_key=','
 let g:ycm_autoclose_preview_window_after_insertion = 1
-highlight LineNr ctermfg=yellow
-call plug#begin('~/.vim/plugged')
+let g:gruvbox_contrast_dark = 'hard'
+let g:LanguageClient_rootMarkers = ['*.cabal', 'stack.yaml']
+highlight LineNr ctermfg=yellow 
+filetype plugin indent on    
+call plug#begin('~/.config/nvim/autoload/plugged')
+Plug 'tomasiser/vim-code-dark'
 Plug 'junegunn/fzf.vim'
 Plug 'VundleVim/Vundle.vim'
 Plug 'scrooloose/nerdtree'
@@ -18,22 +41,20 @@ Plug 'morhetz/gruvbox'
 Plug 'mattn/emmet-vim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'tomasr/molokai'
+Plug 'mhartington/oceanic-next'
+Plug 'phanviet/vim-monokai-pro'
+Plug 'romainl/vim-cool'
+Plug 'crusoexia/vim-monokai'
 call plug#end()
-
+"autocmd FileType python setlocal ts=4 sts=4 sw=4
 autocmd FileType html setlocal ts=2 sts=2 sw=2
-autocmd FileType ruby setlocal ts=2 sts=2 sw=2
-autocmd FileType javascript setlocal ts=4 sts=4 sw=4
-autocmd FileType java setlocal ts=2 sts=2 sw=2
-autocmd FileType C setlocal ts=2 sts=2 sw=2
+autocmd FileType php setlocal ts=4 sts=4 sw=4
+"autocmd FileType ruby setlocal ts=2 sts=2 sw=2
+"autocmd FileType javascript setlocal ts=4 sts=4 sw=4
+"autocmd FileType java setlocal ts=2 sts=2 sw=2
+"autocmd FileType C setlocal ts=2 sts=2 sw=2
 
-:inoremap ( ()<Esc>i
-:inoremap { {}<Esc>i
-:inoremap " ""<Esc>i
-:inoremap [ []<Esc>i
-:inoremap ' ''<Esc>i
-nnoremap <C-p> :Files <CR>
-
-command! -nargs=0 Prettier :call CocAction('runCommand', 'prettier.formatFile')
+command! -nargs=0 Prettier :CocCommand prettier.formatFile
 
 " TextEdit might fail if hidden is not set.
 set hidden
@@ -54,12 +75,6 @@ set shortmess+=c
 
 " Always show the signcolumn, otherwise it would shift the text each time
 " diagnostics appear/become resolved.
-if has("patch-8.1.1564")
-  " Recently vim can merge signcolumn and number column into one
-  set signcolumn=number
-else
-  set signcolumn=yes
-endif
 
 " use <tab> for trigger completion and navigate to the next complete item
 function! s:check_back_space() abort
@@ -117,18 +132,6 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 " Symbol renaming.
 nmap <leader>rn <Plug>(coc-rename)
 
-" Formatting selected code.
-xmap <leader>f  <Plug>(coc-format-selected)
-nmap <leader>f  <Plug>(coc-format-selected)
-
-augroup mygroup
-  autocmd!
-  " Setup formatexpr specified filetype(s).
-  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
-  " Update signature help on jump placeholder.
-  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-augroup end
-
 " Applying codeAction to the selected region.
 " Example: `<leader>aap` for current paragraph
 xmap <leader>a  <Plug>(coc-codeaction-selected)
@@ -155,14 +158,6 @@ omap ac <Plug>(coc-classobj-a)
 nmap <silent> <C-s> <Plug>(coc-range-select)
 xmap <silent> <C-s> <Plug>(coc-range-select)
 
-" Add `:Format` command to format current buffer.
-command! -nargs=0 Format :call CocAction('format')
-
-" Add `:Fold` command to fold current buffer.
-command! -nargs=? Fold :call     CocAction('fold', <f-args>)
-
-" Add `:OR` command for organize imports of the current buffer.
-command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
 
 " Add (Neo)Vim's native statusline support.
 " NOTE: Please see `:h coc-status` for integrations with external plugins that
@@ -186,5 +181,7 @@ nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
 nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list.
 nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
-
+function! GitBranch()
+  return system("git rev-parse --abbrev-ref HEAD 2>/dev/null | tr -d '\n'")
+endfunction
 
